@@ -1,0 +1,111 @@
+# Create Virtual Enviroment:
+mkdir NewDirName # I did this in Documents folder.  Can create anywhere with any name
+cd NewDirName
+sudo apt-get install python3-venv # To install python3-venv enviroment
+python3 -m venv .env # To create virtual enviroment called .env. Can be named anything. Use venv for anything above python 3.5
+source .env/bin/activate # Activate enviroment.
+
+# TO INSTALL DJANGO:
+# Not sure if this needs to be done in each enviroment, i think so
+	pip install django # Install Django
+pip freeze # To see what we have installed in our virtual enviroment
+
+
+
+
+# Create Management App:
+django-admin startproject NameOfManageApp . # be sure and add the dot at the end for a better looking folder structure
+python manage.py runserver # start built-in server to test. Can navigate to url to see if it's working.
+ctrl c to stop server
+
+
+
+
+# Create App:
+python manage.py startapp NameOfApp # creates an app
+#In NameOfManageApp/settings.py add this to INSTALLED_APPS area. Tells system that NameOfApp is part of project
+	# My Apps
+	'NameOfApp',
+
+
+
+
+
+# Add App Routes (by error message):
+# Start server in new terminal window 
+python manage.py runserver
+
+**********Build NameOfManageApp/urls.py**********
+# Browser will not find route at http://127.0.0.1:8000/RouteName/. Generates 404 error
+# In NameOfManageApp/urls.py, folling instructions in file to add:
+	from django.urls import include, path
+	urlpatterns = [
+	    path('RouteName/', include('NameOfApp.urls')),
+		]
+**********Build NameOfApp/urls.py**********
+# Browser will now find route at http://127.0.0.1:8000/RouteName/ but will error as refused to connect
+# Terminal window with running server will output ModuleNotFoundError: No module named 'NameOfApp'
+# To fix this it seems we need to add a module called NameOfApp. Add a file NameOfApp/urls.py
+# A server restart will now generate the error /NameOfApp/urls.py does not appear to have any patterns in it.
+# Now it finds the module
+# The error says we need to add some views in /projects/urls.py.
+# To fix this it seems we need to add patterns to the module /NameOfApp/urls.py
+	# Add this to /NameOfApp/urls.py
+	from django.urls import path
+	from projects import views
+	urlpatterns = [
+	path('', views.NameOfView),
+	]
+
+**********Build NameOfApp/views.py**********
+# Server restart generates error AttributeError: module 'NameOfApp.views' has no attribute 'NameOfView
+# So we need to create a view. In NameOfApp/views.py add
+	def project_list(request):
+		pass
+# The server will restart without any errors. 
+# But a page refresh at http://127.0.0.1:8000/RouteName/ generates this error
+	The view projects.views.project_list didn't return an HttpResponse object. It returned None instead
+# This is because the function we added to views.py returns None.
+# In NameOfApp/views.py add
+	from django.http import HttpResponse
+	def project_list(request):
+		return HttpResponse()
+# A page refresh now generates no errors, just an empty page
+# In NameOfApp/views.py add add this to the return 
+	HttpResponse("<h1>Hello Everyone!</h1>")
+# A refresh of the page now shows the header
+
+
+
+
+
+****************************** How Django Routes Work Example ******************************
+# Django Route Example:
+http://127.0.0.1:8000/projects/
+# Browser GET forwarded to NameOfManageApp/urls.py
+	urlpatterns = [
+	    path('admin/', admin.site.urls),
+	    path('projects/', include('projects.urls')), # Points to projects/urls.py
+	    path("blog/", include("blog.urls")),
+		]
+
+# NameOfManageApp.urls.urlpatterns forwarded to NameOfApp/urls.py
+	urlpatterns = [
+	    path('', views.all_projects, name="all_projects"), # Points to projects/views.py
+	    path('<int:pk>', views.project_detail, name="project_detail"), 
+		]
+
+# NameOfApp.urls forwarded to NameOfApp/views.py to return data
+	def all_projects(request):
+	    # Query the db to return all project objects
+	    projects = Project.objects.all()
+	    #print(projects)
+	    return render(request, 'projects/all_projects.html',
+	                  {'projects': projects})
+
+	def project_detail(request, pk):
+	    project = Project.objects.get(pk=pk)
+	    return render(request, 'projects/detail.html',
+	                  {'project': project})
+********************************************************************************************
+

@@ -1,0 +1,78 @@
+
+
+************************************ GitHub Use ************************************
+
+
+git and GitHub are not the same thing.  git is your local repository while GitHub is your central cloud hosted repository
+You still run git even when using GitHub
+
+As of 8/1/21 you need a token to push to remote repository.  Create this in github.
+			6/9/22 - 90 day access token.  Use this in place of PW for git push = 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
+			If used with git CLI the minimum required scopes are 'repo', 'read:org', 'workflow'. There is no read:org scope so I selected everything and it worked.
+ 
+
+
+git Terms and Tools
+	Local Repository
+		git init = initialize repository
+		git status = status of files to commit and what brance we're on
+		git add <file name> = add file to version control tracking
+		git add -A = new (or untracked), deleted and modified files will be added to your Git staging area. 
+		git commit = save to git
+		git log = print log of all changes
+		git checkout <commit id> = use git log to find commit id.  this will put you in a detached Head state. use git checkout master to return. 
+			Be carefule here.  This should only be used to experiment or review history.
+		git checkout master = return to master branch
+		git checkout -b <name of new branch> = create a new branch
+		git show-branch <branch_name> <branch_name> = compare status of two different branches
+		git merge <branch name> = fast forward merge, merge branches.  execute from master.  All the combined changes of the two branches
+		git rebase <branch name> =  Rewinds to the common ancestor then takes diff of branches and adds that to the project history.  
+			In general, the way to get the best of both worlds is rebase local changes you've made but haven't shared yet before you push them in order to clean up your story, but never rebase anything you've pushed somewhere else.
+	Remote Repository
+		git clone <repository url> - copy your GitHub repository to desktop
+		git fetch <repository url> - fetch other peoples remote reository to desktop
+		git pull - fetch and merge a remote remository
+		git push - push your changes to your remote repository
+		gh auth login = save your token for https push
+
+
+Setup git local repository
+	git config --global user.name <"userName">
+	git config -- global user.email <email>
+	mkdir <dir name>
+	cd <dir name>
+	git init
+	<Add files to folder>
+	git add <name of file>
+	git commit -m "note about commit file"
+	<create .gitignore file and add file names to it>
+	<add and commit .gitignore file to repository>
+	
+
+Setup GitHub remote repository
+	On Website
+		Create new repository on GitHub
+			select .gitignore format <python>
+	On Desktop
+		create new folder on desktop
+		git clone <clone url> - run from new folder to copy remote repository to desktop
+		use git add, git commit, git checkout... to save to local repository like normal.
+		optional > 	gh auth login
+		git push, pull to interact with your remote repository
+
+
+Example git workflow
+	git status
+	git pull
+	make your changes and edits
+	git status
+	git add
+	git commit
+	git push
+
+
+
+
+Training Resources
+	Remote Git Repositories and GitHub - RealPython.com
+

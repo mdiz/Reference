@@ -1,0 +1,306 @@
+Tools:
+Raspberry Pi Imager v1.4
+Install Raspberry Pi OS (32 bit) Release Date 2020-05-27
+	Setup Local, Network...
+	Update Software
+	Enable SSH, VNC, SPI...
+
+  
+
+Laptop Tools
+	Raspberry Pi Imager v1.4 https://www.raspberrypi.org/downloads/
+	Putty https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html
+	VNC Viewer https://www.realvnc.com/en/connect/download/viewer/
+
+
+
+http://www.ladeezfirstmedia.com/2014/04/14/tutorial-up-and-running-with-raspberry-pi-and-lua/ --discusses IOT and some tools that might be intresting.
+
+https://www.thegeekstuff.com/2010/09/linux-file-system-structure/ --information on linux folder structure
+
+https://ctlsys.com/wp-content/uploads/2016/10/WNC-Modbus-Manual-V18c.pdf --WattNode Manual
+
+https://www.modbustools.com/mbslave-user-manual.html#:~:text=Modbus%20TCP%2FIP%3A,port%20number%20is%20default%20502. --modbus explained
+https://www.prosoft-technology.com/kb/assets/intro_modbustcp.pdf
+
+https://www.virtual-serial-port.org/article/modbus-scanner/#howto -- really nice scanner
+
+
+Pi editors:
+https://chrome.google.com/webstore/detail/caret/fljalecfjciodhpcledpamjachpmelml?hl=en --text editor for Pi like sublime t
+https://code.visualstudio.com/
+https://foicica.com/textadept/
+
+
+8/19/20 1pm
+
+
+Image 8gb Micro SD
+Raspberry Pi OS (32-bit) with desktop
+Image with desktop based on Debian Buster
+Version:May 2020
+Release date:2020-05-27
+Kernel version:4.19
+Size:1128 MB
+
+
+To configure from commandline
+sudo raspi-config --config system
+sudo nano /boot/config.txt
+passwd --change password
+sudo apt-get update --update OS
+sudo apt-get upgrade
+sudo ifconfig --print network info
+more /etc/network/interfaces --print network config file
+sudo nano /etc/network/interfaces --edit network config file
+sudo nano /etc/hostname --set network name
+sudo nano /etc/hosts
+
+Ensure that you have development tools installed on your system, otherwise run the command below to install them.
+-$ sudo apt install build-essential libreadline-dev
+
+Remove lua 5.1
+https://howtoinstall.co/en/ubuntu/trusty/lua5.1?action=remove
+sudo apt-get remove lua5.1
+sudo apt-get autoremove lua5.1
+
+Reboot
+
+Install lua 5.3.5
+https://www.lua.org/download.html
+https://www.lua.org/manual/5.4/readme.html
+From /home/pi
+-$ curl -R -O http://www.lua.org/ftp/lua-5.3.5.tar.gz
+-$ tar -zxf lua-5.3.5.tar.gz
+-$ cd lua-5.3.5
+-$ make linux test
+-$ sudo make install
+
+Reboot
+
+Install LuaRocks
+From /home/pi
+https://github.com/luarocks/luarocks/wiki/Installation-instructions-for-Unix
+-$ wget https://luarocks.org/releases/luarocks-3.3.1.tar.gz
+-$ tar zxpf luarocks-3.3.1.tar.gz
+-$ cd luarocks-3.3.1
+Run ./configure --with-lua-include=/usr/local/include. (This will attempt to detect your installation of Lua. If you get any error messages, see the section "Customizing your settings", below.)
+This still found a trace of 5.1
+So, i used this to force 5.3.  Output said it found 5.3.  Check location and did find lua 5.3.5 at /usr/local/bin
+-$ ./configure --lua-version=5.3.5
+-$ make 
+-$ sudo make install
+
+Reboot
+
+Install libmodbus
+  https://libmodbus.org/
+  https://github.com/stephane/libmodbus
+-$ wget https://libmodbus.org/releases/libmodbus-3.1.6.tar.gz
+-$ tar zxf libmodbus-3.1.6.tar.gz
+-$ cd libmodbus-3.1.6
+-$ ./configure
+-$ make
+-$ sudo make install
+
+Reboot
+
+Install lua-libmodbus
+http://etactica.github.io/lua-libmodbus/ -- Manual
+https://luarocks.org/modules/karlp/lua-libmodbus
+https://github.com/etactica/lua-libmodbus
+Downloaded and unziped but could not configure file
+		-$ wget https://github.com/etactica/lua-libmodbus/archive/master.zip
+		-$ unzip master.zip
+		-$ cd lua-libmodbus-master
+		make LUAPKG=lua-5.3
+		sudo make install
+This worked and can call require("libmodbus") from lua command command line
+-$ sudo luarocks install lua-libmodbus
+Still got message that it requires lua5.1
+
+Reboot
+
+Install git
+sudo apt update
+sudo apt install git
+git clone https://github.com/mdiz/veo_lua.git
+git config ––global user.name “github_username”
+git config ––global user.email “email_address”
+
+This setup resulted in this package.path on Pi
+/usr/local/share/lua/5.3/?.lua;
+/usr/local/share/lua/5.3/?/init.lua;
+/usr/local/lib/lua/5.3/?.lua;
+/usr/local/lib/lua/5.3/?/init.lua;
+./?.lua;
+./?/init.lua
+
+
+
+Where do lua scripta go?
+I put them in /usr/local/share/lua/5.3/.
+Info seems to suggest they should go in opt
+
+8/21/20 lua-libmodbus is working well but can not read 32 bit floating values.
+Going to try python with a pipe to lua
+
+Install Python
+Install uModbus - looks like good docs and eludes to 32 bit floating ability
+Other package to consider is pymodbus.  Docs are extensive and very confusing.  It's a huge package with lots of capability.
+
+Note from python docs regarding package installations:
+Note Due to the way most Linux distributions are handling the Python 3 migration, Linux users using the system Python without creating a virtual environment first should replace the python command in this tutorial with python3 and the pip command with pip3 --user. Do not run any of the commands in this tutorial with sudo: if you get a permissions error, come back to the section on creating virtual environments, set one up, and then continue with the tutorial as written.
+
+
+
+
+******** From Here I Worked from a Umbutu Install on Laptop **********
+
+
+
+
+Install Sublime Text 3
+wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | sudo apt-key add -
+sudo apt-get install apt-transport-https
+echo "deb https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sources.list.d/sublime-text.list
+sudo apt-get update
+sudo apt-get install sublime-text
+
+Install pip
+$ sudo apt install python3-pip
+
+Install Lua 5.3
+~$ sudo apt install lua5.3  
+This setup resulted in this package.path on Umbutu
+/usr/local/share/lua/5.3/?.lua;
+/usr/local/share/lua/5.3/?/init.lua;
+/usr/local/lib/lua/5.3/?.lua;
+/usr/local/lib/lua/5.3/?/init.lua;
+/usr/share/lua/5.3/?.lua;
+/usr/share/lua/5.3/?/init.lua;
+./?.lua;
+./?/init.lua
+
+
+Python 3.8.2 already installed
+
+
+
+https://pymodbus.readthedocs.io/en/latest/readme.html
+Install pyModbus
+~$ sudo pip3 install  -U pymodbus
+~$ sudo pip3 install -U pymodbus[twisted]
+~$ sudo pip3 install -U pymodbus[tornado]
+~$ pip3 install click prompt_toolkit --upgrade	OR  ~$ pip install -U pymodbus[repl]
+pip install -U pymodbus[repl]
+
+
+
+
+/.dropbox-dist/.dropbox-dist/dropboxd
+~/.dropbox-dist/dropboxd
+
+
+
+sudo rmmod ftdi_sio
+sudo rmmod usbserial
+sudo modprobe usbserial vendor=0x0403 product=0x6001
+
+
+
+https://pymodbus.readthedocs.io/en/latest/source/library/pymodbus.html?highlight=32%20bit%20float%20#pymodbus.payload.BinaryPayloadDecoder.decode_32bit_float
+
+https://ctlsys.com/wp-content/uploads/2016/10/WNC-Modbus-Manual-V18c.pdf
+
+
+
+Before serial communications can be used in Unbuntu must set user to dialout group
+https://www.usconverters.com/downloads/support/Installing-FTDI-VCP-Drivers-Linux.pdf
+groups mikedismore
+sudo gpasswd -a mikedismore dialout
+groups mikedismore
+
+
+
+
+**********************************************************************************************
+Misc Information Collected:
+
+
+(01) Coils Registers (0XXXX)
+(02) Input Status (1XXXX)
+(03) Holding Registers (4XXXX)
+(04) Input Registers (3XXXX)
+
+
+lsusb --list USB connected devices
+dmesg --ran this and got a LOT of info.  Found where it said "FTDI USB Serial Device converter now attached to ttyUSB0"
+so use /dev/ttyUSB0 as USB device
+
+Modbus is 0 based so, depending on driver, will need to subtract 1 from register number listed to get proper response value
+
+Modbus Register Addressing
+	There are a few points about Modbus register addressing that can cause confusion.
+	● In the Modbus specification, register numbers are documented as “one based”, but transmitted as “zero based”. For example, we document that EnergySum appears at address 1001.
+	If you are using any Modbus software or Modbus aware device, you should use “1001” as the
+	register address. However, if you are writing your own low-level Modbus driver or firmware,
+	you will need to subtract one from the register number when creating the Modbus frame (or 
+	Operating Instructions 33
+	packet), so the actual register number that appears on the RS-485 bus will be “1000” (or in
+	hexadecimal, 0x03E8).
+	● A common Modbus convention adds the function code as a leading digit on the register
+	number, so a register like EnergySum (1001) would be documented as 41001. All input registers (function code 04) would use the form 4xxxx, while holding registers (function code 03)
+	would use the form 3xxxx. The WattNode meter treats holding registers and input registers
+	interchangeably, and does not use this convention. If your Modbus software expects a leading “3” or “4”, either will work for most registers, and use “3” for configuration registers.
+
+
+
+Zlan Defaults
+192.168.1.200
+Port 4196 is default, changed to 502, 1024
+MAC 28:53:4D:CD:F6:B2
+Device ID: 28534DCDF6B2
+Firmware v1.483
+
+
+
+Configure your devices to use the Pi-hole as their DNS server      │ 
+     │ using:                                                             │ 
+     │                                                                    │ 
+     │ IPv4:        192.168.86.19                                         │ 
+     │ IPv6:        Not Configured                                        │ 
+     │                                                                    │ 
+     │ If you set a new IP address, you should restart the Pi.            │ 
+     │                                                                    │ 
+     │ The install log is in /etc/pihole.                                 │ 
+     │                                                                    │ 
+     │ View the web interface at http://pi.hole/admin or                  │ 
+     │ http://192.168.86.19/admin                                         │ 
+     │                                                                    │ 
+     │ Your Admin Webpage login password is fpi4o2dG 
+
+
+
+
+If then else
+enable * input +   (NOT enable) * Input2
+ if input == 1 then 
+ 	return input
+ else
+ 	return input2
+
+
+if then else
+enable * input +   (NOT enable) * Self
+if input == 1 then 
+	return input
+else
+	return previous value
+
+enable * input +   (NOT enable) * 22.5
+
+IfValue * IfReturnValue + (NOT IfValue) * ElseReturnValue
+
+
+

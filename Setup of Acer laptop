@@ -1,0 +1,102 @@
+Setup of Acer laptop
+6/7/22
+
+Ubuntu 22.04
+
+Came with python v3.10.4, Latest version is v3.10.5
+
+
+Installed SublimeText 4 - Installs the latest stable version
+	Adding Sublime Repository Key
+		sudo wget -O- https://download.sublimetext.com/sublimehq-pub.gpg | gpg --dearmor | sudo tee /usr/share/keyrings/sublimehq.gpg
+	Importing Sublime Repository
+		$ echo 'deb [signed-by=/usr/share/keyrings/sublimehq.gpg] https://download.sublimetext.com/ apt/stable/' | sudo tee /etc/apt/sources.list.d/sublime-text.list
+	Update System
+		sudo apt update
+	Install Sublime
+		sudo apt install sublime-text
+
+
+Installed Dropbox
+	Step 1: Enable Multiverse Repository
+		Open app Software and Updates, Enable "Software restricted and copyright or legal issues (multiverse)"
+	Step 2: Install Nautilus/Caja Extension
+		sudo apt update
+		sudo apt install nautilus-dropbox
+		After installation, it may pop-up a dialog indicates to restart your file manager. It’s OK to just close it.
+		The first time launching the app will indicate to download & install the proprietary daemon package. 
+		Just click on “OK” button. It will start downloading and installing the daemon automatically. 
+		By default it will try to sync everything.  You will need to configure for the files you need.
+
+
+Installed lua 5.1
+	sudo apt install lua5.1
+	
+
+Installed pip3
+sudo apt install python-pip3
+
+
+Installed git
+	sudo apt install git
+
+
+
+************  instructions correct down to here, need to work out how to install git repostory into virtual environment ***************
+
+remove git from project, run this command while inside your project directory:
+	rm -rf .git
+
+Clone my Veo project
+	git clone https://github.com/mdiz/veo.git
+
+
+
+
+Need to know how to install all the supporting apps for the environment
+Looks like this is how most folks do it but i'm missing setup.py
+	from within project
+	python3 setup.py install *** my environment does not have this file
+
+
+
+Steps as i know them...
+	Create Enviroment
+	Install git
+	Clone repository 
+	Automatically install environment applications
+
+
+
+
+
+
+
+
+
+
+To create a virtual enviroment
+    Create a project directory
+    Change into the project directory
+    Run python3 -m venv <name_of_virtualenv> -- like this Run python3 -m venv ./veoenv
+
+
+Latest version of pyModbus:
+	Version 2.5.3 is the last 2.x release (Supports python 2.7.x - 3.7).
+	Version 3.0.0dev4 is the current prerelease of 3.0.0 (Supports Python >=3.8).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

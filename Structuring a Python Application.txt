@@ -1,0 +1,217 @@
+*******************************************************************************************************
+HOMEWORK
+
+
+PROBLEMS TO SOLVE
+
+Do we use a library or class to create/store data?
+How do we create an object factory?
+Does the app class include the IVO for that class or is IVO separate?
+
+
+THINGS TO WATCH / READ
+GitHub Actions: Continuous Integration
+Hello GitHub Actions!
+
+Check out the Real Python Advanced Git Tips for Python Developers
+Review Pipenv as option for built python enviroment
+Review "Getting Started With Testing in Python"
+Pick a CI package.  CircleCI, looks like git has something.
+Continuous Integration With Python - https://realpython.com/courses/python-continuous-integration/
+
+Object-Oriented Programming (OOP) With Python - https://realpython.com/learning-paths/object-oriented-programming-oop-python/
+Data Classes in Python 3.7+ (Guide) - https://realpython.com/python-data-classes/
+Dictionaries and Arrays: Selecting the Ideal Data Structure - https://realpython.com/courses/dicts-arrays-ideal-data-structure/
+Structuring a Python Application - https://realpython.com/courses/structuring-python-application/
+
+
+********************************************************************************************************************************
+THOUGHTS FOR VEO
+
+-- Objects divided into these major catagories
+Site - Schedule, Physical Address, Sq Footage, Building Name 
+CPU - Like CFG, ETH, Serial Number, IP, SNTP, CPU Usage, Mem Available, web services pole rate
+DGU - IO Interface, poleRate
+APP - ACR, ACU, PFC, PG, Required Packages
+IVO - Like AI, BI, AO, BO, HIT
+IVO Support - AIC, Units
+
+Could have something like HIT for a map to IO
+
+There are multi cpu per site, multi hardware per cpu, multi app per hardware, multi io per app ...
+
+
+-- Thoughts
+There are application related and non-application related objects.
+There are attributes we will include in an object creation table and there are attributes created by the class.  like currentValue
+CPU will have local web page so attributes like description will be needed localy.
+Versions are complete Application tables.  Revisions are minor changes to the version.
+Only need multiple control and alarm programs.  Only need one PG 1,2,7,8.
+Should control program run as subroutine with dedicated HIT or should it be same program run as function with various HIT.
+
+
+********************************************************************************************************************************
+ENVIROMENT SETUP
+
+These do a great job of explaining how to setup a dev enviroment
+Continuous Integration With Python - https://realpython.com/courses/python-continuous-integration/
+Managing Python Dependencies - https://realpython.com/courses/managing-python-dependencies/
+Working With Python Virtual Environments - https://realpython.com/courses/working-python-virtual-environments/
+DevOps With Python - https://realpython.com/learning-paths/python-devops/
+
+TO CREATE ENVIROMENT
+https://dbader.org/blog/write-a-great-readme-for-your-github-project
+
+mkdir dir # In Documents folder?
+cd dir
+sudo apt-get install python3-venv # To install python3-venv enviroment
+python3 -m venv .env # To create virtual enviroment
+source .env/bin/activate # Activate enviroment
+
+deactivate # to deactivate virtual enviroment, return to global enviroment
+
+
+STRUCTURING A PYTHON APPLICATION
+
+
+ONE-OFF SCRIPT
+
+helloworld/
+│
+├── .gitignore # What files to ignore when syncing with git
+├── helloworld.py # Sample files at https://github.com/github/gitignore
+├── LICENSE # http://choosealicense.com
+├── README.md # https://dbader.org/blog/write-a-great-readme-for-your-github-project; Short description of project. Use markdown (.md) or reStructured text (.rst) to show automatically on github projects home page
+├── requirements.txt # Specifies dependices for both tests and code
+├── setup.py # For organizing how system is packaged.  Interacts with packaging and application tools
+└── tests.py # Automated tests
+
+
+
+
+INSTALLABLE SINGLE PACKAGE
+
+
+helloworld/
+│
+├── helloworld/
+│   ├── __init__.py
+│   ├── helloworld.py
+│   └── helpers.py
+│
+├── tests/
+│   ├── helloworld_tests.py
+│   └── helpers_tests.py
+│
+├── .gitignore
+├── LICENSE
+├── README.md
+├── requirements.txt
+└── setup.py
+
+
+
+
+APPLICATION WITH INTERNAL PACKAGES
+
+helloworld/
+│
+├── bin/
+│
+├── docs/
+│   ├── hello.md
+│   └── world.md
+│
+├── helloworld/
+│   ├── __init__.py
+│   ├── runner.py
+│   ├── hello/
+│   │   ├── __init__.py
+│   │   ├── hello.py
+│   │   └── helpers.py
+│   │
+│   └── world/
+│       ├── __init__.py
+│       ├── helpers.py
+│       └── world.py
+│
+├── data/
+│   ├── input.csv
+│   └── output.xlsx
+│
+├── tests/
+│   ├── hello
+│   │   ├── helpers_tests.py
+│   │   └── hello_tests.py
+│   │
+│   └── world/
+│       ├── helpers_tests.py
+│       └── world_tests.py
+│
+├── .gitignore
+├── LICENSE
+└── README.md
+
+
+
+
+********************************************************************************************************************************
+HOW I DID IT
+
+# Create git repo then clone
+# Use git bash in windows. 
+git clone https://github.com/mdiz/CalculatorLibrary
+
+# create virtual environment
+python -m venv calculator 
+
+# activate environment 
+. calculator/bin/activate
+# for windows use calculator/scripts/activate
+
+# create and send file to github
+git add calculator.py OR git add --all
+git commit -m 'Add functions for addition and subtraction'
+git push
+ALSO
+git status to see if branch is up to date
+git log to see all changes
+git clone https://name of your git repo
+
+# we will be performing units tests and lint test as well as monitoring test coverage so install packages for this
+pip install flake8 pytest pytest-cov
+
+pip list command returns list of packages with version install in environment
+
+# add packages to requirments file
+pip freeze > requirments.txt
+
+# run flake8 to check for formatting errors. This command fails in windows
+flake8 --statistics
+
+
+# create file test_calculator.py
+# test_ is how pytest will know this file contains unit tests
+pytest -v --cov .
+
+# add to git
+git add -A
+git commit -m 'Add unit test for calculator'
+git push 
+
+# to use circleci create new folder and file in repo
+\calculatorlibrary\.circleci\config.yml
+
+# add to git
+git add -A
+git commit -m 'add config files for circleci'
+git push 
+
+
+# create circleci account
+# activate calculator project
+# this failed due to use of windows
+
+
+    def test_multiplication(self):
+        assert 100 == calculator.multiply(10, 10)
