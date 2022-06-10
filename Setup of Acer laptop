@@ -44,11 +44,7 @@ Installed git
 
 ************  instructions correct down to here, need to work out how to install git repostory into virtual environment ***************
 
-remove git from project, run this command while inside your project directory:
-	rm -rf .git
 
-Clone my Veo project
-	git clone https://github.com/mdiz/veo.git
 
 
 
@@ -65,12 +61,6 @@ Steps as i know them...
 	Install git
 	Clone repository 
 	Automatically install environment applications
-
-
-
-
-
-
 
 
 

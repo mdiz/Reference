@@ -1,0 +1,52 @@
+
+
+************************************ virtual environment setup and usage ************************************
+
+
+A virtual environment is an isolated python working environment
+By default pip installs packages into the global environment. Use a virtual environment to isolate various packages and their dependencies 
+
+
+
+Things to study
+	how to use pip and other python package managers
+	install use and manage packages
+	how to find and identify quality python packages
+	setup repeatable development environments with requirenments files
+
+
+
+
+Virtual Environment Terms and Tools
+	which <filename> = prints the path to a file
+	python3 -m venv ./<folder name (typically venv)>
+	source ./venv/bin/activate = activate the virtual environment
+	pip3 list = show installed packages
+	pip3 install <package name> = installs a python package
+	pip3 freeze > requirements.txt = create a list of venv installed packages into a file called requirements.txt
+	deactivate = leave the virtual environment; return to the global environment
+
+
+
+Setup Virtual Environment
+	mkdir <dir name>
+	cd <dir name>
+		if not installed - sudo apt install python3.10-venv
+	python3 -m venv ./<folder name (typically venv)>
+	source ./venv/bin/activate
+	pip3 install <package name>
+	pip3 freeze > requirements.txt
+
+
+
+
+Clone repository 
+source ./veoenv/bin/activate
+pip install -r requirements.txt
+
+
+/home/mikedismore/projects/veo/dgu
+
+
+
+You can run python -m pip install -r requirements.txt to install all of the specified dependencies at once. 

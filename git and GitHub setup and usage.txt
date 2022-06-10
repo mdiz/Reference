@@ -74,5 +74,5 @@ Example git workflow
 
 
 Training Resources
-	Remote Git Repositories and GitHub - RealPython.com
+	Introduction to Git and GitHub for Python Developers - RealPython.com
 
