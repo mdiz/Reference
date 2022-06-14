@@ -1,6 +1,6 @@
 
 
-************************************ GitHub Use ************************************
+************************************ git/GitHub Use ************************************
 
 
 git and GitHub are not the same thing.  git is your local repository while GitHub is your central cloud hosted repository
@@ -69,8 +69,6 @@ Example git workflow
 	git add
 	git commit
 	git push
-
-
 
 
 Training Resources

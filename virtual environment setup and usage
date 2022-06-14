@@ -1,21 +1,87 @@
+requests.get('http://voyantems.com:10020/xvqsrengines/xvqsrengines.asmx/controllerViewStatus?serialNumber=veo1&storeNumber=veo_calling&bucketData=T:1655235439;CD:BV122:1;CD:BV123:1')
+
+<Response [200]>
+
+r = requests.get('http://voyantems.com:10020/xvqsrengines/xvqsrengines.asmx/controllerViewStatus?serialNumber=veo1&storeNumber=veo_calling&bucketData=T:1655235439;CD:BV122:1;CD:BV123:1')
 
 
-************************************ virtual environment setup and usage ************************************
-
-
-A virtual environment is an isolated python working environment
-By default pip installs packages into the global environment. Use a virtual environment to isolate various packages and their dependencies 
-
+  WARNING: The script normalizer is installed in '/home/mikedismore/.local/bin' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
 
 
 Things to study
 	how to use pip and other python package managers
 	install use and manage packages
 	how to find and identify quality python packages
-	setup repeatable development environments with requirenments files
+	setup repeatable development environments with requirenments file
+	remove virtual venv
+
+
+Training Resources
+	Managing Python dependencies with pip and virtual environments - RealPython.com
+	Managing Python Dependencies - RealPython.com
+
+
+************************************ Managing third-party packages with pip ************************************
+
+pip3 is the default python package manager.  It works with PyPI (pypi.org)
+
+
+Terms and Tools
+	pip3 --version = print version
+	pip3 --help = print help on pip commands
+	to install pip - should be included with any modern python 
+	pip3 show <package name> = print package information.
+	pip3 --outdated = print outdated packages
+	pip3 -U <package name> = upgrade package
+	pip3 uninstall <package name> = uninstall package.  will not remove secondary dependencies, use virtual environment!
+
+
+Installing and updating pip
+	sudo apt update = refresh system's package manager
+	sudo apt install python-pip = install pip, should be included with any modern python installation
+	sudo apt update && sudo apt upgrade python3-pip = update pip
+	pip3 list = print all installed packages
+	pip3 install <package name> = install package from PyPI
+
+
+Python package repositories
+	The biggest/official repository is called PyPI (cheese shop or Warehouse (latest))
+	Developers can register for a free PyPI account and submit new packages to the repository.  Once submitted everyone can install it through pip.
+	pypi.org
+
+
+Installing packages with pip
+	pip3 install <package name>
+	pip3 install <package name>==<package version>
+	pip3 install <package name>=<start version>,<>stop version>
+	pip3 install <package name>~=<package version> = anything compatable, for minor version updates
+
+	Installing packages from pip
+		pip install git+<git url><@master> = install from git branch
+		pip install git+<git url><@2aaf6ac> = install from git commit hash
+		pip install git+<git url><@v2.13.0> = install from git tag/release
+
+	 	Generally though, if you can install a package from a proper package repository like PyPI, then I would definitely do it. Installing a Python package directly from a version control system like git is a bit of a special case. Typically, you wouldn’t use that functionality to install any old publicly available package, but you would reserve it for those special moments when you really need to be on the cutting edge and maybe need to install a specific commit of a package to get your program to work. This is definitely useful but I would also handle it with care, and stick to PyPI when possible. 
+
+
+Identifing and updating outdated packages
+	pip3 list --outdated
+	pip3 install --upgrade <package name>
+		OR pip3 install -U <package name>
+
+
+Uninstalling packages
+	pip3 uninstall <package name>
+		will not uninstall secondary dependencies
 
 
 
+
+************************************ Isolating Dependencies With Virtual Environments ************************************
+
+A virtual environment is an isolated python working environment
+By default pip installs packages into the global environment. Use a virtual environment to isolate various packages and their dependencies 
 
 Virtual Environment Terms and Tools
 	which <filename> = prints the path to a file
@@ -23,12 +89,11 @@ Virtual Environment Terms and Tools
 	source ./venv/bin/activate = activate the virtual environment
 	pip3 list = show installed packages
 	pip3 install <package name> = installs a python package
-	pip3 freeze > requirements.txt = create a list of venv installed packages into a file called requirements.txt
+	pip3 freeze > requirements.txt = create a list of venv installed packages into a file called requirements.txt.  Later used to restore venv.
 	deactivate = leave the virtual environment; return to the global environment
 
 
-
-Setup Virtual Environment
+Setup New Virtual Environment
 	mkdir <dir name>
 	cd <dir name>
 		if not installed - sudo apt install python3.10-venv
@@ -38,15 +103,75 @@ Setup Virtual Environment
 	pip3 freeze > requirements.txt
 
 
+Remove virtual enviroment
+	rm -rf <virtual enviroment folder>
 
 
-Clone repository 
-source ./veoenv/bin/activate
-pip install -r requirements.txt
+Restore Virtual Enviroment from GitHub
+	Clone repository 
+	source ./veoenv/bin/activate
+	python -m pip install -r requirements.txt
 
 
-/home/mikedismore/projects/veo/dgu
+Typical workflow
+	create alias for activate
+		# ~/.bash_profile
+		alias ae='deactivate &> /dev/null; source ./venv/bin/activate'
+		alias de='deactivate'
 
 
 
-You can run python -m pip install -r requirements.txt to install all of the specified dependencies at once. 
+************************************ Finding quality Python packages ************************************
+
+	https://docs.python.org/3/py-modindex.html = one-sentence summaries of all modules available in the Python standard library. 
+
+    awesome-python.com = list of packages by topic
+    python.libhunt.com = list of awesome-python packages with better search and stats
+    python-guide.org = Good for lists/info based on topic
+    wiki.python.org
+    pymotw.com = Based on standard python library
+
+
+Selecting Quality Packages - 7 Steps
+	Find a pool of candidate packages
+	Successively refine list
+
+	Step 1 - Finding candidate packages
+		Browse curated lists
+		Quick Search Google
+		Search Stack Overflow
+		Comminity forums - reddit python, hacker news, twitter
+		Search PyPI directly
+		Ask a question on Stack Overflow or Reddit
+
+	Step 2 - Check package popularity
+		Review download stats (if available)
+		Number of results on Google/Reddit, Stack Overflow
+		GirHub stars
+		python.libhunt.com popularity indicator
+
+	Step 3 - Check project homepage
+		Is it helpful?
+		Is it well manitained?
+		How successful does the project look?
+
+	Step 4 - Check project README
+		Does it cover the basics of the project and how to install it?
+		What license is the project under? license file on gitHub.
+		Who is the author?  What have they done in the past? author file on gitHub.
+	Step 5 - Is the project actively maintained>
+		Skim the chanelog/update history.
+		Is there activity on the bug tracker?
+		When was the last commit to the project?
+	Step 6 - Spot-check the source code
+		Does the code follow commminity best practices?
+		Are there automated tests?
+		How experinced were the developers who wrote it?
+		Would I feel comfortable making small changes if i had to?
+	Step 7 - Try out a few candidates
+		Take a narrowed down list of candidates and try them out in and interpreter session (with a fresh venv)
+		Does the package install and import cleanly?
+		Do you enjoy working with the package?
+
+
+************************************ Reproducible Environments and Application Deploys ************************************
