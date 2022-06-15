@@ -41,39 +41,35 @@ Installed git
 	sudo apt install git
 
 
-
-************  instructions correct down to here, need to work out how to install git repostory into virtual environment ***************
-
-
-
-
-
-
-Need to know how to install all the supporting apps for the environment
-Looks like this is how most folks do it but i'm missing setup.py
-	from within project
-	python3 setup.py install *** my environment does not have this file
+Recreate veo project
+	Create project folder
+	Create virtual environment
+	Clone repository
+	install project dependencies
 
 
+Setup Sublime to use virtual environment
+	Tools > Build System > New Build System
+	Add the following to the file
+		{
+	    "shell_cmd": "/home/mikedismore/projects/veo/veoenv/bin/python -u \"$file\"",
+	    "file_regex": "^[ ]*File \"(...*?)\", line ([0-9]*)",
+	    "selector": "source.python"
+		}
+	Change /home/mikedismore/projects/veo/veoenv/bin/python to the python path in virtual environment
+		to find path
+			activate environment
+			which python
+			copy result
+	Save file as YourName.sublime-build
+	Restart Sublime
+	Tools > Build System > YourBuild
 
-Steps as i know them...
-	Create Enviroment
-	Install git
-	Clone repository 
-	Automatically install environment applications
 
-
-
-
-To create a virtual enviroment
-    Create a project directory
-    Change into the project directory
-    Run python3 -m venv <name_of_virtualenv> -- like this Run python3 -m venv ./veoenv
-
-
-Latest version of pyModbus:
-	Version 2.5.3 is the last 2.x release (Supports python 2.7.x - 3.7).
-	Version 3.0.0dev4 is the current prerelease of 3.0.0 (Supports Python >=3.8).
+Notes
+	Latest version of pyModbus:
+		Version 2.5.3 is the last 2.x release (Supports python 2.7.x - 3.7).
+		Version 3.0.0dev4 is the current prerelease of 3.0.0 (Supports Python >=3.8).
 
 
 

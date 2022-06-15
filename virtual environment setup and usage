@@ -1,28 +1,12 @@
-requests.get('http://voyantems.com:10020/xvqsrengines/xvqsrengines.asmx/controllerViewStatus?serialNumber=veo1&storeNumber=veo_calling&bucketData=T:1655235439;CD:BV122:1;CD:BV123:1')
-
-<Response [200]>
-
-r = requests.get('http://voyantems.com:10020/xvqsrengines/xvqsrengines.asmx/controllerViewStatus?serialNumber=veo1&storeNumber=veo_calling&bucketData=T:1655235439;CD:BV122:1;CD:BV123:1')
-
-
-  WARNING: The script normalizer is installed in '/home/mikedismore/.local/bin' which is not on PATH.
-  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
-
-
-Things to study
-	how to use pip and other python package managers
-	install use and manage packages
-	how to find and identify quality python packages
-	setup repeatable development environments with requirenments file
-	remove virtual venv
-
 
 Training Resources
 	Managing Python dependencies with pip and virtual environments - RealPython.com
 	Managing Python Dependencies - RealPython.com
 
 
+
 ************************************ Managing third-party packages with pip ************************************
+
 
 pip3 is the default python package manager.  It works with PyPI (pypi.org)
 
@@ -73,12 +57,13 @@ Identifing and updating outdated packages
 
 Uninstalling packages
 	pip3 uninstall <package name>
-		will not uninstall secondary dependencies
+		will not uninstall secondary dependencies.  Use a venv!
 
 
 
 
 ************************************ Isolating Dependencies With Virtual Environments ************************************
+
 
 A virtual environment is an isolated python working environment
 By default pip installs packages into the global environment. Use a virtual environment to isolate various packages and their dependencies 
@@ -89,7 +74,6 @@ Virtual Environment Terms and Tools
 	source ./venv/bin/activate = activate the virtual environment
 	pip3 list = show installed packages
 	pip3 install <package name> = installs a python package
-	pip3 freeze > requirements.txt = create a list of venv installed packages into a file called requirements.txt.  Later used to restore venv.
 	deactivate = leave the virtual environment; return to the global environment
 
 
@@ -100,7 +84,6 @@ Setup New Virtual Environment
 	python3 -m venv ./<folder name (typically venv)>
 	source ./venv/bin/activate
 	pip3 install <package name>
-	pip3 freeze > requirements.txt
 
 
 Remove virtual enviroment
@@ -122,6 +105,7 @@ Typical workflow
 
 
 ************************************ Finding quality Python packages ************************************
+
 
 	https://docs.python.org/3/py-modindex.html = one-sentence summaries of all modules available in the Python standard library. 
 
@@ -174,4 +158,38 @@ Selecting Quality Packages - 7 Steps
 		Do you enjoy working with the package?
 
 
+
 ************************************ Reproducible Environments and Application Deploys ************************************
+
+
+Terms and Tools
+	pip3 freeze > requirements.txt = create a list of venv installed packages into a file called requirements.txt.  Later used to restore venv.
+
+
+Capturing project dependencies
+	pip3 freeze > requirements.txt - only captures third party packages used, this will not capture the version of python used.
+
+
+Restoring dependencies
+	pip3 install -r requirements.txt - restore dependcies.  execute within venv
+
+
+Separating development and production dependencies
+	Development environment may have dependencies that production may not.
+	Solution is to create two requirements files.  One for development and one for production.
+		requiremants-dev.txt and requirements.txt
+		include -r requirements.txt in the requirements-dev.txt file
+
+
+Requirements files best practices
+	some dev dependencies may go without a version specifier
+	put requirenments files in root folder of project
+	requirenments files support comments
+		# this is a comment
+	requirenments files typical file naming
+		requirenments.txt
+		requirenments.pip
+		requirenments.lock
+		requirenments-dev.txt
+
+
