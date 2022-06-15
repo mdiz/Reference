@@ -65,6 +65,10 @@ Setup Sublime to use virtual environment
 	Restart Sublime
 	Tools > Build System > YourBuild
 
+Update/Upgrade Ubuntu
+	sudo apt update = Get updated software list for Ubuntu
+	apt list --upgradable = To see available updates
+	sudo apt upgrade = apply updates and patches
 
 Notes
 	Latest version of pyModbus:
