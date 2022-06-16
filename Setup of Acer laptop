@@ -70,6 +70,42 @@ Update/Upgrade Ubuntu
 	apt list --upgradable = To see available updates
 	sudo apt upgrade = apply updates and patches
 
+
+
+Issue with USB to Serial converter
+	When we connected our USB to Serial converter to Ubuntu 22.04, it got detected as ttyUSB0 but got disconnected immediately. Despite we tried many times, even after replacing cable, rebooted few times, the problem persisted and we were not able to access the USB to Serial Converter to access device terminal.
+
+	The dmesg logs observed are as, - sudo dmesg | tail
+		[65808.757932] usb 3-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+		[65808.757935] usb 3-1: Product: FT232R USB UART
+		[65808.757937] usb 3-1: Manufacturer: FTDI
+		[65808.757939] usb 3-1: SerialNumber: AH06QAD6
+		[65808.761479] ftdi_sio 3-1:1.0: FTDI USB Serial Device converter detected
+		[65808.761519] usb 3-1: Detected FT232RL
+		[65808.762188] usb 3-1: FTDI USB Serial Device converter now attached to ttyUSB0
+		[65810.738048] usb 3-1: usbfs: interface 0 claimed by ftdi_sio while 'brltty' sets config #1
+		[65810.738851] ftdi_sio ttyUSB0: FTDI USB Serial Device converter now disconnected from ttyUSB0
+		[65810.738885] ftdi_sio 3-1:1.0: device disconnected
+
+	So, we tried to find what this “brltty” is
+		$ sudo apt-cache search brltty
+		brltty - Access software for a blind person using a braille display
+
+	So, it is a package related to braille display. We tried to remove this package,
+		sudo apt-get remove brltty
+
+	And now, we disconnected and reconnected USB to Serial Converter, and it found to be working properly and stable.
+		[66400.957877] usb 3-1: new full-speed USB device number 9 using xhci_hcd
+		[66401.121304] usb 3-1: New USB device found, idVendor=0403, idProduct=6001, bcdDevice= 6.00
+		[66401.121313] usb 3-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+		[66401.121316] usb 3-1: Product: FT232R USB UART
+		[66401.121318] usb 3-1: Manufacturer: FTDI
+		[66401.121320] usb 3-1: SerialNumber: AH06QAD6
+		[66401.125223] ftdi_sio 3-1:1.0: FTDI USB Serial Device converter detected
+		[66401.125264] usb 3-1: Detected FT232RL
+		[66401.125894] usb 3-1: FTDI USB Serial Device converter now attached to ttyUSB0
+
+
 Notes
 	Latest version of pyModbus:
 		Version 2.5.3 is the last 2.x release (Supports python 2.7.x - 3.7).
